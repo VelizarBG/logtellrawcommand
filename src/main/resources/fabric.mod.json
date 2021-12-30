@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "logtellrawcommand",
+  "version": "${version}",
+
+  "name": "Logtellraw Command",
+  "description": "Log tellraw's output to the server console or game output",
+  "authors": [
+    "VelizarBG"
+  ],
+  "contact": {
+    "sources": "https://github.com/VelizarBG/logtellrawcommand"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "mixins": [
+    "logtellrawcommand.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
