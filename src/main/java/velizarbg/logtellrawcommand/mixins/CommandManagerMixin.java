@@ -13,9 +13,7 @@ import velizarbg.logtellrawcommand.commands.LogTellrawCommand;
 
 @Mixin(CommandManager.class)
 public class CommandManagerMixin {
-	@Shadow
-	@Final
-	private CommandDispatcher<ServerCommandSource> dispatcher;
+	@Shadow @Final private CommandDispatcher<ServerCommandSource> dispatcher;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onRegister(CallbackInfo ci) {

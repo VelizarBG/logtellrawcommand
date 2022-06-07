@@ -4,11 +4,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.TextArgumentType;
+import net.minecraft.network.message.MessageType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Texts;
-import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,9 @@ public class LogTellrawCommand {
 					.executes(context -> {
 						LOGGER.info(((StringVisitable) Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), null, 0)).getString());
 						return 0;
-					})))
+					})
+				)
+			)
 			.then(literal("targets")
 				.then(argument("targets", EntityArgumentType.players())
 					.then(argument("message", TextArgumentType.text())
@@ -35,12 +37,16 @@ public class LogTellrawCommand {
 							int i = 0;
 							try {
 								for (ServerPlayerEntity serverPlayerEntity : EntityArgumentType.getPlayers(context, "targets")) {
-									serverPlayerEntity.sendSystemMessage(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), Util.NIL_UUID);
+									serverPlayerEntity.sendMessage(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), MessageType.TELLRAW_COMMAND);
 									++i;
 								}
 							} catch (CommandSyntaxException ignored) {
 							}
 							return i;
-						})))));
+						})
+					)
+				)
+			)
+		);
 	}
 }
