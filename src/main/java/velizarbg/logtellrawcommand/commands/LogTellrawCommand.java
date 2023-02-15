@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.TextArgumentType;
-import net.minecraft.network.message.MessageType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.StringVisitable;
@@ -37,7 +36,7 @@ public class LogTellrawCommand {
 							int i = 0;
 							try {
 								for (ServerPlayerEntity serverPlayerEntity : EntityArgumentType.getPlayers(context, "targets")) {
-									serverPlayerEntity.sendMessage(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), MessageType.TELLRAW_COMMAND);
+									serverPlayerEntity.sendMessage(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), false);
 									++i;
 								}
 							} catch (CommandSyntaxException ignored) {
