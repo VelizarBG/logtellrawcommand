@@ -36,7 +36,7 @@ public class LogTellrawCommand {
 							int i = 0;
 							try {
 								for (ServerPlayerEntity serverPlayerEntity : EntityArgumentType.getPlayers(context, "targets")) {
-									serverPlayerEntity.sendMessage(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), false);
+									serverPlayerEntity.sendMessageToClient(Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), serverPlayerEntity, 0), false);
 									++i;
 								}
 							} catch (CommandSyntaxException ignored) {
