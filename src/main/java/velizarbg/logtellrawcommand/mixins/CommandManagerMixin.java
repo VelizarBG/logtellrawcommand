@@ -1,6 +1,8 @@
 package velizarbg.logtellrawcommand.mixins;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import org.spongepowered.asm.mixin.Final;
@@ -16,7 +18,7 @@ public class CommandManagerMixin {
 	@Shadow @Final private CommandDispatcher<ServerCommandSource> dispatcher;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
-	private void onRegister(CallbackInfo ci) {
-		LogTellrawCommand.register(dispatcher);
+	private void onRegister(CallbackInfo ci, @Local(argsOnly = true) CommandRegistryAccess commandRegistryAccess) {
+		LogTellrawCommand.register(dispatcher, commandRegistryAccess);
 	}
 }

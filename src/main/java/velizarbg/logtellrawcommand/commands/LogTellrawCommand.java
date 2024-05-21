@@ -2,6 +2,7 @@ package velizarbg.logtellrawcommand.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.TextArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -17,11 +18,11 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class LogTellrawCommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogTellrawCommand.class);
 
-	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess) {
 		dispatcher.register(literal("logtellraw")
 			.requires(source -> source.hasPermissionLevel(2))
 			.then(literal("targetless")
-				.then(argument("message", TextArgumentType.text())
+				.then(argument("message", TextArgumentType.text(commandRegistryAccess))
 					.executes(context -> {
 						LOGGER.info(((StringVisitable) Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), null, 0)).getString());
 						return 0;
@@ -30,7 +31,7 @@ public class LogTellrawCommand {
 			)
 			.then(literal("targets")
 				.then(argument("targets", EntityArgumentType.players())
-					.then(argument("message", TextArgumentType.text())
+					.then(argument("message", TextArgumentType.text(commandRegistryAccess))
 						.executes(context -> {
 							LOGGER.info(((StringVisitable) Texts.parse(context.getSource(), TextArgumentType.getTextArgument(context, "message"), null, 0)).getString());
 							int i = 0;
