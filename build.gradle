@@ -68,7 +68,7 @@ unifiedPublishing {
 	project {
 		displayName.set "v$project.version"
 		releaseType.set "release"
-		gameVersions.set(["1.20.5", "1.20.6"])
+		gameVersions.set(["1.21.5"])
 		gameLoaders.set(["fabric"])
 
 		System.getenv("changelog")?.with { String changelogg ->
