@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.10.5'
-	id "me.shedaniel.unified-publishing" version "0.1.+"
+	id 'fabric-loom' version '1.14.5'
+	id 'me.modmuss50.mod-publish-plugin' version '1.1.+'
 	id 'maven-publish'
 }
 
@@ -30,9 +30,13 @@ dependencies {
 
 processResources {
 	inputs.property "version", project.version
+	inputs.property "minecraft_dependency", project.minecraft_dependency
+	inputs.property "loader_dependency", project.loader_dependency
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "version": project.version,
+				"minecraft_dependency": project.minecraft_dependency,
+				"loader_dependency": project.loader_dependency
 	}
 }
 
@@ -74,33 +78,34 @@ publishing {
 	}
 }
 
-unifiedPublishing {
-	project {
-		displayName.set "v$project.version"
-		releaseType.set "release"
-		gameVersions.set(["1.21.5"])
-		gameLoaders.set(["fabric"])
+publishMods {
+	file = remapJar.archiveFile
+	additionalFiles.from(remapSourcesJar.archiveFile)
+	version = "$project.version"
+	displayName = "v$project.mod_version+$project.title_version"
+	type = STABLE
+	modLoaders = ["fabric"]
 
-		System.getenv("changelog")?.with { String changelogg ->
-			changelog.set changelogg
-		}
+	System.getenv("changelog")?.with { String changelogg ->
+		changelog = changelogg
+	}
 
-		mainPublication tasks.remapJar
-
-		System.getenv("curse_api_key")?.with { String key ->
-			curseforge {
-				token.set key
-				id.set project.curseforge_id
-				gameVersions.addAll "Java 21"
-			}
-		}
-
-		System.getenv("modrinth_key")?.with { String key ->
-			modrinth {
-				token.set key
-				id.set project.modrinth_id
-				version = "$project.version"
-			}
+	System.getenv("curse_api_key")?.with { String key ->
+		curseforge {
+			accessToken = key
+			projectId = project.curseforge_id
+			minecraftVersions = ["Java 21", *project.release_versions.split(" ")]
 		}
 	}
+
+	System.getenv("modrinth_key")?.with { String key ->
+		modrinth {
+			accessToken = key
+			projectId = project.modrinth_id
+			minecraftVersions = [*project.release_versions.split(" ")]
+		}
+	}
+
+	// When dry run is enabled the release assets will be saved to the build directory for testing.
+//	dryRun = true
 }
