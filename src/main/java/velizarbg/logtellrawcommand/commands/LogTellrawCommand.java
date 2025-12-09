@@ -19,7 +19,7 @@ public class LogTellrawCommand {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext) {
 		dispatcher.register(literal("logtellraw")
-			.requires(source -> source.hasPermission(2))
+			.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(literal("targetless")
 				.then(argument("message", ComponentArgument.textComponent(commandBuildContext))
 					.executes(context -> {
