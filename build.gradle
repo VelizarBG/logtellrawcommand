@@ -94,7 +94,8 @@ publishMods {
 		curseforge {
 			accessToken = key
 			projectId = project.curseforge_id
-			minecraftVersions = ["Java 21", *project.release_versions.split(" ")]
+			minecraftVersions = [*project.release_versions.split(" ")]
+			javaVersions.add(JavaVersion.VERSION_21)
 		}
 	}
 
