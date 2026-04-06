@@ -33,15 +33,15 @@ public class LogTellrawCommand {
 					.then(argument("message", ComponentArgument.textComponent(commandBuildContext))
 						.executes(context -> {
 							LOGGER.info((ComponentArgument.getResolvedComponent(context, "message", null)).getString());
-							int i = 0;
+							int result = 0;
 							try {
 								for (ServerPlayer player : EntityArgument.getPlayers(context, "targets")) {
-									player.sendSystemMessage(ComponentArgument.getResolvedComponent(context, "message", player), false);
-									++i;
+									player.sendSystemMessage(ComponentArgument.getResolvedComponent(context, "message", player));
+									result++;
 								}
 							} catch (CommandSyntaxException ignored) {
 							}
-							return i;
+							return result;
 						})
 					)
 				)

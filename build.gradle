@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.14.5'
+	id 'net.fabricmc.fabric-loom' version '1.16.1'
 	id 'me.modmuss50.mod-publish-plugin' version '1.1.+'
 	id 'maven-publish'
 }
@@ -12,20 +12,12 @@ base {
 }
 
 repositories {
-	maven {
-		name = 'ParchmentMC'
-		url = 'https://maven.parchmentmc.org'
-	}
 }
 
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.layered {
-		officialMojangMappings { nameSyntheticMembers = true }
-		parchment("org.parchmentmc.data:parchment-${project.parchment_version}@zip")
-	}
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 }
 
 processResources {
@@ -41,18 +33,15 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.20.5 upwards uses Java 21.
-	it.options.release = 21
+	// Minecraft 26.1 upwards uses Java 25.
+	it.options.release = 25
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {
@@ -79,8 +68,8 @@ publishing {
 }
 
 publishMods {
-	file = remapJar.archiveFile
-	additionalFiles.from(remapSourcesJar.archiveFile)
+	file = jar.archiveFile
+	additionalFiles.from(sourcesJar.archiveFile)
 	version = "$project.version"
 	displayName = "v$project.mod_version+$project.title_version"
 	type = STABLE
@@ -95,7 +84,7 @@ publishMods {
 			accessToken = key
 			projectId = project.curseforge_id
 			minecraftVersions = [*project.release_versions.split(" ")]
-			javaVersions.add(JavaVersion.VERSION_21)
+			javaVersions.add(JavaVersion.VERSION_25)
 		}
 	}
 
